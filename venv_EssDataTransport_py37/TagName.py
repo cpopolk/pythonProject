@@ -1,0 +1,197 @@
+import pandas as pd
+
+class TagList:
+    Kesco_Common_list ={'Contents':['날짜','시간','프로토콜버전','재전송카운트','전송일련번호'],
+                  'KESCO_TAG':['CAA','CAB','CAC','CAD','CAE'],
+                  'DB_TAG':['DATE', 'TIME', '2', 0,0 ],
+                  'TYPE':['DATE','TIME(0)','INT','INT','INT']}
+
+    Kesco_BMS_list_1 ={'Contents':['데이터타입',
+                           '장치일련번호',
+                           '랙 번호',
+                           '랙 동작모드',
+                           'SOC',
+                           'SOH',
+                           '랙 전압',
+                           '랙 전류',
+                           '평균 셀 전압',
+                           '최대 셀 전압',
+                           '최소 셀 전압',
+                           '최대 셀 전압 위치',
+                           '최소 셀 전압 위치',
+                           '평균온도',
+                           '최고온도',
+                           '최저온도',
+                           '최고온도 위치',
+                           '최저온도 위치',
+                           'Cell Balancing',
+                           'Warning',
+                           'Fault',
+                           '랙 차단기 혹은 스위치 상태',
+                           '데이터 끝'],
+               'KESCO_TAG':['TAG','BAA','BAB','BAC','BBA',
+                            'BBB', 'BCA', 'BCB', 'BDA', 'BDB',
+                            'BDC', 'BEA', 'BEB', 'BFA','BFB',
+                            'BFC', 'BGA', 'BGB', 'BHA', 'BHB',
+                            'BHC', 'BIA', 'TAG'],
+               'DB_TAG':['BMS', 'BMS_1_SerialNo', '0', '0','AI: BAT 1 Usable State of Charge',
+                         'AI: BAT 1 State of Health','AI: BAT 1 External Battery Voltage','AI: BAT 1 Current', '0', 'AI: BAT 1 Maximum Cell Voltage',
+                         'AI: BAT 1 Minimum Cell Voltage', '0', '0', '0','AI: BAT 1 Maximum Module Temperature',
+                         'AI: BAT 1 Minimum Module Temperature','0','0','0','0',
+                         '0','0','END'],
+               'TYPE':['STRING','STRING','SMALLINT','INT', 'DECIMAL(4,1)',
+                       'DECIMAL(4,1)','DECIMAL(5,1)','DECIMAL(4,1)','DECIMAL(4,3)','DECIMAL(4,3)',
+                       'DECIMAL(4,3)','SMALLINT','SMALLINT','DECIMAL(3,1)','DECIMAL(3,1)',
+                       'DECIMAL(3,1)', 'SMALLINT','SMALLINT', 'INT','INT',
+                       'INT','INT','STRING']}
+
+
+    Kesco_BMS_list_2 ={'Contents':['데이터타입',
+                           '장치일련번호',
+                           '랙 번호',
+                           '랙 동작모드',
+                           'SOC',
+                           'SOH',
+                           '랙 전압',
+                           '랙 전류',
+                           '평균 셀 전압',
+                           '최대 셀 전압',
+                           '최소 셀 전압',
+                           '최대 셀 전압 위치',
+                           '최소 셀 전압 위치',
+                           '평균온도',
+                           '최고온도',
+                           '최저온도',
+                           '최고온도 위치',
+                           '최저온도 위치',
+                           'Cell Balancing',
+                           'Warning',
+                           'Fault',
+                           '랙 차단기 혹은 스위치 상태',
+                           '데이터 끝'],
+               'KESCO_TAG':['TAG','BAA','BAB','BAC','BBA',
+                            'BBB', 'BCA', 'BCB', 'BDA', 'BDB',
+                            'BDC', 'BEA', 'BEB', 'BFA','BFB',
+                            'BFC', 'BGA', 'BGB', 'BHA', 'BHB',
+                            'BHC', 'BIA', 'TAG'],
+               'DB_TAG':['BMS', 'BMS_2_SerialNo', '0', '0','AI: BAT 2 Usable State of Charge',
+                         'AI: BAT 2 State of Health','AI: BAT 2 External Battery Voltage','AI: BAT 2 Current', '0', 'AI: BAT 2 Maximum Cell Voltage',
+                         'AI: BAT 2 Minimum Cell Voltage', '0', '0', '0','AI: BAT 2 Maximum Module Temperature',
+                         'AI: BAT 2 Minimum Module Temperature','0','0','0','0',
+                         '0','0','END'],
+               'TYPE':['STRING','STRING','SMALLINT','INT', 'DECIMAL(4,1)',
+                       'DECIMAL(4,1)','DECIMAL(5,1)','DECIMAL(4,1)','DECIMAL(4,3)','DECIMAL(4,3)',
+                       'DECIMAL(4,3)','SMALLINT','SMALLINT','DECIMAL(3,1)','DECIMAL(3,1)',
+                       'DECIMAL(3,1)', 'SMALLINT','SMALLINT', 'INT','INT',
+                       'INT','INT','STRING']}
+
+
+
+    Kesco_EMS_list_1 ={'Contents':['데이터타입','장치일련번호','PCS 번호','PCS 동작모드','SOC',
+                           'AC 차단기 상태','DC 차단기 상태','A상 전압','B상 전압','C상 전압',
+                           'A상 전류','B상 전류','C상 전류','주파수','유효전력',
+                           '무효전력','역률','Warning','Fault','IGBT 평균온도',
+                           'IGBT 최고온도', 'IGBT 최저온도','IGBT 최고온도 위치','IGBT 최저온도 위치', 'AC SPD Counter',
+                           'DC SPD Counter', '데이터 끝'],
+               'KESCO_TAG':['TAG','EAA','EAB','EAC','EAD',
+                            'EBA', 'EBB', 'ECA', 'ECB', 'ECC',
+                            'EDA', 'EDB', 'EDC', 'EEA','EEB',
+                            'EEC', 'EED', 'EFA', 'EFB', 'EGA',
+                            'EGB', 'EGC', 'EHA', 'EHB', 'EIA',
+                            'EIB', 'TAG'],
+               'DB_TAG':['EMS', 'EMS_1_SerialNo', 'PCS_1_SerialNo', '0' ,'AI: BAT 1 Usable State of Charge',
+                         '0','0','AI: PCS 1 Voltage Phase AB', 'AI: PCS 1 Voltage Phase BC', 'AI: PCS 1 Voltage Phase CA',
+                         '0', '0', '0','0','AI: PCS 1 Real Power',
+                         'AI: PCS 1 Reactive Power','AI: PCS 1 Power Factor','0','0','0',
+                         '0','0','0','0','0',
+                         '0','END'],
+               'TYPE':['STRING','STRING','SMALLINT','INT', 'DECIMAL(4,1)',
+                       'INT','INT','DECIMAL(4,1)','DECIMAL(4,1)','DECIMAL(4,1)',
+                       'DECIMAL(5,1)','DECIMAL(5,1)','DECIMAL(5,1)','DECIMAL(3,1)','DECIMAL(6,1)',
+                       'DECIMAL(6,1)','DECIMAL(3,2)','INT','INT','DECIMAL(3,1)',
+                       'DECIMAL(3,1)','DECIMAL(3,1)','SMALLINT','SMALLINT','SMALLINT',
+                       'SMALLINT','STRING']}
+    Kesco_EMS_list_2 ={'Contents':['데이터타입','장치일련번호','PCS 번호','PCS 동작모드','SOC',
+                           'AC 차단기 상태','DC 차단기 상태','A상 전압','B상 전압','C상 전압',
+                           'A상 전류','B상 전류','C상 전류','주파수','유효전력',
+                           '무효전력','역률','Warning','Fault','IGBT 평균온도',
+                           'IGBT 최고온도', 'IGBT 최저온도','IGBT 최고온도 위치','IGBT 최저온도 위치', 'AC SPD Counter',
+                           'DC SPD Counter', '데이터 끝'],
+               'KESCO_TAG':['TAG','EAA','EAB','EAC','EAD',
+                            'EBA', 'EBB', 'ECA', 'ECB', 'ECC',
+                            'EDA', 'EDB', 'EDC', 'EEA','EEB',
+                            'EEC', 'EED', 'EFA', 'EFB', 'EGA',
+                            'EGB', 'EGC', 'EHA', 'EHB', 'EIA',
+                            'EIB', 'TAG'],
+               'DB_TAG':['EMS', 'EMS_2_SerialNo', 'PCS_2_SerialNo', '0','AI: BAT 2 Usable State of Charge',
+                         '0','0','AI: PCS 2 Voltage Phase AB', 'AI: PCS 2 Voltage Phase BC', 'AI: PCS 2 Voltage Phase CA',
+                         '0', '0', '0','0','AI: PCS 2 Real Power',
+                         'AI: PCS 2 Reactive Power','AI: PCS 2 Power Factor','0','0','0',
+                         '0','0','0','0','0',
+                         '0','END'],
+               'TYPE':['STRING','STRING','SMALLINT','INT', 'DECIMAL(4,1)',
+                       'INT','INT','DECIMAL(4,1)','DECIMAL(4,1)','DECIMAL(4,1)',
+                       'DECIMAL(5,1)','DECIMAL(5,1)','DECIMAL(5,1)','DECIMAL(3,1)','DECIMAL(6,1)',
+                       'DECIMAL(6,1)','DECIMAL(3,2)','INT','INT','DECIMAL(3,1)',
+                       'DECIMAL(3,1)','DECIMAL(3,1)','SMALLINT','SMALLINT','SMALLINT',
+                       'SMALLINT','STRING']}
+
+
+
+    Kesco_ETC_list_1 ={'Contents':['데이터타입','장치일련번호','절연저항','배터리실 평균온도', '배터리실 최고온도',
+                           '배터리실 최저온도', '배터리실 최고온도 위치', '배터리실 최저온도 위치','배터리실 평균습도', '배터리실 최고습도',
+                           '배터리실 최저습도', '배터리실 최고습도 위치','배터리실 최저습도 위치','PCS 평균온도','PCS 최고온도',
+                           'PCS 최저온도','PCS 최고온도 위치','PCS 최저온도 위치','PCS 평균습도','PCS 최고습도',
+                           'PCS 최저습도', 'PCS 최고습도 위치','PCS 최저습도 위치','데이터 끝'],
+               'KESCO_TAG':['TAG','XAA','XBA','XBB','XBC',
+                            'XBD', 'XCA', 'XCB', 'XDA', 'XDB',
+                            'XDC', 'XEA', 'XEB', 'XFB','XFC',
+                            'XFD', 'XGA', 'XGB', 'XHA', 'XHB',
+                            'XHC', 'XIA', 'XIB', 'TAG'],
+               'DB_TAG':['ETC', 'N/A', 'N/A', 'N/A', 'N/A',
+                         'N/A','N/A','N/A','N/A','N/A', 'N/A','N/A','N/A','N/A','N/A',
+                         'N/A','N/A','N/A','N/A','N/A', 'N/A','N/A','N/A','END'],
+               'TYPE':['STRING','STRING','DECIMAL(5,1)','DECIMAL(3,1)', 'DECIMAL(3,1)',
+                       'DECIMAL(3,1)','SMALLINT','SMALLINT','DECIMAL(3,1)', 'DECIMAL(3,1)',
+                       'DECIMAL(3,1)','SMALLINT','SMALLINT', 'DECIMAL(3,1)','DECIMAL(3,1)',
+                       'DECIMAL(3,1)','SMALLINT', 'SMALLINT', 'DECIMAL(3,1)','DECIMAL(3,1)',
+                       'DECIMAL(3,1)', 'SMALLINT', 'SMALLINT','STRING'],
+                'Value': ['ETC', '1', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'END']}
+
+    Kesco_ETC_list_2 ={'Contents':['데이터타입','장치일련번호','절연저항','배터리실 평균온도', '배터리실 최고온도',
+                           '배터리실 최저온도', '배터리실 최고온도 위치', '배터리실 최저온도 위치','배터리실 평균습도', '배터리실 최고습도',
+                           '배터리실 최저습도', '배터리실 최고습도 위치','배터리실 최저습도 위치','PCS 평균온도','PCS 최고온도',
+                           'PCS 최저온도','PCS 최고온도 위치','PCS 최저온도 위치','PCS 평균습도','PCS 최고습도',
+                           'PCS 최저습도', 'PCS 최고습도 위치','PCS 최저습도 위치','데이터 끝'],
+               'KESCO_TAG':['TAG','XAA','XBA','XBB','XBC',
+                            'XBD', 'XCA', 'XCB', 'XDA', 'XDB',
+                            'XDC', 'XEA', 'XEB', 'XFB','XFC',
+                            'XFD', 'XGA', 'XGB', 'XHA', 'XHB',
+                            'XHC', 'XIA', 'XIB', 'TAG'],
+               'DB_TAG':['ETC', 'N/A', 'N/A', 'N/A', 'N/A',
+                         'N/A','N/A','N/A','N/A','N/A', 'N/A','N/A','N/A','N/A','N/A',
+                         'N/A','N/A','N/A','N/A','N/A', 'N/A','N/A','N/A','END'],
+               'TYPE':['STRING','STRING','DECIMAL(5,1)','DECIMAL(3,1)', 'DECIMAL(3,1)',
+                       'DECIMAL(3,1)','SMALLINT','SMALLINT','DECIMAL(3,1)', 'DECIMAL(3,1)',
+                       'DECIMAL(3,1)','SMALLINT','SMALLINT', 'DECIMAL(3,1)','DECIMAL(3,1)',
+                       'DECIMAL(3,1)','SMALLINT', 'SMALLINT', 'DECIMAL(3,1)','DECIMAL(3,1)',
+                       'DECIMAL(3,1)', 'SMALLINT', 'SMALLINT','STRING'],
+                'Value': ['ETC', 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'END']}
+
+#    pd.set_option('display.max_row', None, 'display.max_columns', None)
+
+#    df_Common_list = pd.DataFrame(Kesco_Common_list)
+#    print(df_Common_list)
+#    df_BMS_list_1 = pd.DataFrame(Kesco_BMS_list_1)
+#    print(df_BMS_list_1)
+#    df_EMS_list_1 = pd.DataFrame(Kesco_EMS_list_1)
+#    print(df_EMS_list_1)
+#    df_BMS_list_2 = pd.DataFrame(Kesco_BMS_list_2)
+#    print(df_BMS_list_2)
+#    df_EMS_list_2 = pd.DataFrame(Kesco_EMS_list_2)
+#    print(df_EMS_list_2)
+
+#    df_ETC_list_1 = pd.DataFrame(Kesco_ETC_list_1)
+#    print(df_ETC_list_1)
+#    df_ETC_list_2 = pd.DataFrame(Kesco_ETC_list_2)
+#    print(df_ETC_list_2)
