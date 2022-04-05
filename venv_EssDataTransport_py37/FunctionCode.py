@@ -1,3 +1,4 @@
+import os
 import psycopg2, openpyxl
 import pandas as pd
 import time
@@ -60,37 +61,29 @@ class receiveIndex():
       except:
           print('failed to export data')
 
-
-  def AutoMode(self):
-      global converted_timeData
-      converted_timeData = int(self.Converted_Roop_Time.get())
-#      print(converted_timeData)
-
-      global converted_btn_Status
-      converted_btn_Status = int(self.Converted_AutoMode_Status.get())
-#      print(converted_btn_Status)
-
-      try:
-          if converted_btn_Status == 1:
-             self.AutoOperate()
-          else:
-              print("쓰레드가 해제되었습니다.")
-
-      except(KeyboardInterrupt):
-          print("자동 실행을 적용할 수 없습니다.")
+  def Auto(self):
+      self.ManualDataload()
+      self.ManualDataWebExport()
+    #  roop.start()
 
   def AutoOperate(self):
-      try :
-        if converted_btn_Status == 1:
-          self.ManualDataload()
-          self.ManualDataWebExport()
-          Roop = threading.Timer(converted_timeData, self.AutoOperate)
-          Roop.start()
+      print(type(self.Converted_AutoMode_Status.get()))
 
-      except(KeyboardInterrupt):
-          print("자동 실행 해체 상태입니다.")
+      if  self.Converted_AutoMode_Status.get() == 1 :
+          self.Auto()
+          roop = threading.Timer(int(self.Converted_Roop_Time.get()), self.AutoOperate)
+          roop.daemon = True # start 전에 true로 설정해 놓으면 메인뜨레드 종료시 서브뜨레드 종료
+          roop.start()
+     #     print(type(self.Converted_Roop_Time.get())) # get()함수로 가지고 오는 data는 string type 임
+
+      else:
+         raise threading.excepthook
+         #os.kill()
+         print("쓰레드가 해제되었습니다.")
 
   def insertNewCondition(self):
+
+
    self.host = self.hostInfor.get()
    self.name = self.nameInfor.get()
    self.user = self.userInfor.get()
@@ -118,7 +111,7 @@ class receiveIndex():
            rows = cur.fetchall()
 #           print(rows)  #list임
            DGPC_Database_df= pd.DataFrame(rows, columns=['DB_TAG','Value'])
-           print(DGPC_Database_df)
+#           print(DGPC_Database_df)
            pd.set_option('display.max_row', None, 'display.max_columns', None)
 
 # in  사용법 , series를 list화 : 'AI: BAT 2 Usable State of Charge' in DGPC_Database_df['DB_TAG'].to_list()
@@ -139,13 +132,13 @@ class receiveIndex():
                BMS_MergredDataframe_1.iloc[0,4] = 'BMS'
                BMS_MergredDataframe_1.iloc[1,4] = '01'
                BMS_MergredDataframe_1.iloc[22,4] = 'END'
-               print(BMS_MergredDataframe_1)
+ #              print(BMS_MergredDataframe_1)
 
                BMS_MergredDataframe_2= pd.merge(BMS_List_2_df, DGPC_Database_df,how='left', on='DB_TAG')
                BMS_MergredDataframe_2.iloc[0,4] = 'BMS'
                BMS_MergredDataframe_2.iloc[1,4] = '02'
                BMS_MergredDataframe_2.iloc[22,4] = 'END'
-               print(BMS_MergredDataframe_2)
+#               print(BMS_MergredDataframe_2)
 
                EMS_MergredDataframe_1= pd.merge(EMS_List_1_df, DGPC_Database_df,how='left', on='DB_TAG')
 
@@ -237,12 +230,12 @@ class receiveIndex():
                          datablock.loc[i,'Value'] = beforeTypechanged
                          i = i + 1
 
-               print(BMS_MergredDataframe_1)
-               print(BMS_MergredDataframe_2)
-               print(EMS_MergredDataframe_1)
-               print(EMS_MergredDataframe_2)
-               print(ETC_List_1_df)
-               print(ETC_List_2_df)
+#               print(BMS_MergredDataframe_1)
+#               print(BMS_MergredDataframe_2)
+#               print(EMS_MergredDataframe_1)
+#               print(EMS_MergredDataframe_2)
+#               print(ETC_List_1_df)
+#               print(ETC_List_2_df)
 
                BMS_MergredDataframe_1['Value'].fillna('0', inplace=True)
                BMS_MergredDataframe_2['Value'].fillna('0', inplace=True)
@@ -343,9 +336,9 @@ class receiveIndex():
 
                BMS_MergredDataframe_1['Value'].fillna('0', inplace=True)
                EMS_MergredDataframe_1['Value'].fillna('0', inplace=True)
-               print(BMS_MergredDataframe_1)
-               print(EMS_MergredDataframe_1)
-               print(ETC_List_1_df)
+#               print(BMS_MergredDataframe_1)
+#               print(EMS_MergredDataframe_1)
+#               print(ETC_List_1_df)
 
 
                Export_Dataframe = [BMS_MergredDataframe_1, EMS_MergredDataframe_1, ETC_List_1_df]
@@ -361,7 +354,7 @@ class receiveIndex():
   def MakeDataList(self):
     try:
         _Now = str(datetime.datetime.now())
-        print(_Now)
+ #       print(_Now)
         #essTime = [now.year, now.month, now.day, now.hour, now.minute] 이렇게도 정보를 받을 수있만 0이 생략된 형태(참고)
         Day = _Now[0:10]
         Time = _Now[11:19]
@@ -411,11 +404,23 @@ class receiveIndex():
   def ToWebTransport(self):
     try:
       stored = outputData.replace("\n","")
-      response = requests.post(url=self.url, data= result)
-      with open('output.txt', 'a') as file:
+      response = requests.post(url=self.url, data= result, timeout=(3,10))
+
+      filePath = os.getcwd() #파일설치 폴더 경로만(파일명 제외)
+#      print(type(filePath))
+
+      if not os.path.exists("Data Log"):
+       os.mkdir("Data Log")
+
+      filename = str(datetime.date.today())
+      Log_stored_path = "{}/Data Log/{}.txt".format (filePath, filename)
+#      print(stored_path)
+
+      with open(Log_stored_path, 'a') as file:
        file.write(response.text)
        file.write(stored)
 
+# HMI에 표시
       self.Transfer_Time.insert(0,str(datetime.datetime.now()))
       self.Response_Result.insert(0, response.text)
 

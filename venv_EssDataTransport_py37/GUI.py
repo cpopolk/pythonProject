@@ -81,7 +81,7 @@ class Gui():
 
 #URL 주소입력
   urlInfor=StringVar()
-  urlInfor.set('http://safe.kesco.or.kr/ess/datauploadV2.do')
+  urlInfor.set('http://safe.kesco.or.kr/ess/datauploadtestV2.do')
   urlInfor = Entry(root, width=38, textvariable=urlInfor)
   urlInfor.grid(row=6, column=2, sticky=N+E+W+S, pady=0)
 
@@ -178,7 +178,7 @@ class Gui():
   btn2.place(x=470, y=100)
 #  btn2.grid(row=7, column=5, sticky= W, ipadx=6)
 
-  btn_AutoFC= Checkbutton(root, var=_on, command=instance1.AutoMode)
+  btn_AutoFC= Checkbutton(root, var=_on, command=instance1.AutoOperate)
   btn_AutoFC.place(x=510, y=170)
   '''
   btn_AutoFC= Checkbutton(root, var=_on, command=instance1.AutoMode)
