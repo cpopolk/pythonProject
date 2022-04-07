@@ -5,8 +5,6 @@ import pandas as pd
 #import schedule
 import time
 import sys
-#import threading
-#from btnAuto import *
 #파일이름 넣어줘야 클래스 인스턴스됨
 
 _root = Tk() # Tkinter Tool 사용을 root에 선언함
@@ -81,30 +79,52 @@ class Gui():
 
 #URL 주소입력
   urlInfor=StringVar()
-  urlInfor.set('http://safe.kesco.or.kr/ess/datauploadtestV2.do')
+  urlInfor.set('http://safe.kesco.or.kr/ess/datauploadV2.do')
   urlInfor = Entry(root, width=38, textvariable=urlInfor)
   urlInfor.grid(row=6, column=2, sticky=N+E+W+S, pady=0)
 
 #ID 입력
   idInfor = StringVar()
+
+# DER 1eap
+#  idInfor.set("3530_010570_N_PV15R026189") # 일지테크 경주공장 YW2WZ1TMQAK1BK6V
+#  idInfor.set("3500_050709_N_PV15R048136") # 강원에스티 J2PP0LZ7U6XHPMDH
+#  idInfor.set("3500_050507_N_PV15R048146") # 비에스에스 W0DIFRNFN46P5CCP
+#  idInfor.set("3500_050506_N_PV15R047912") # 대한몰드 K5D435HG20FBAYOM
+#  idInfor.set("3500_046956_N_PV15R021091") # 일지테크 J3LU67ORV3QYN5PG
+#  idInfor.set("3500_040388_N_PV15R033876") # 대한메탈본사 2Q4ZRFPCXTIE9AMR
+#  idInfor.set("3500_048383_N_PV15R033293") # 대한메탈CS EFU03JBSFHGCUH8N
+  idInfor.set("3500_046862_N_PV15R020393")  # 일지테크 K&C Q2YICT73KTOE3S8L
+
+#DER 2ea
 #  idInfor.set("6505_016220_N_PV10R038864")# 삼척
 #  idInfor.set("8100_028512_N_PV10S5477") #참새
 #  idInfor.set("8100_028504_N_PV10S5478") #고니
 #  idInfor.set("8100_028511_N_PV10S5476") #까치
-  idInfor.set("3500_048428_N_PV15R033876") # 대한메탈본사 2Q4ZRFPCXTIE9AMR
-
+#  idInfor.set("3500_048428_N_PV15R033876") # 대한메탈본사 2Q4ZRFPCXTIE9AMR
 
   idInfor = Entry(root, width=30, textvariable=idInfor)
   idInfor.grid(row=7, column=2, sticky=N+E+W+S, pady=0)
 
 #PW 입력
   pwInfor = StringVar()
+
+# DER 1ea
+#  pwInfor.set("YW2WZ1TMQAK1BK6V")   # 일지테크 경주공장 YW2WZ1TMQAK1BK6V
+#  pwInfor.set("J2PP0LZ7U6XHPMDH")  # 강원에스티 J2PP0LZ7U6XHPMDH
+#  pwInfor.set("W0DIFRNFN46P5CCP")  # 비에스에스 W0DIFRNFN46P5CCP
+#  pwInfor.set("K5D435HG20FBAYOM")  # 대한몰드 K5D435HG20FBAYOM
+#  pwInfor.set("J3LU67ORV3QYN5PG")  # 일지테크 J3LU67ORV3QYN5PG
+#  pwInfor.set("2Q4ZRFPCXTIE9AMR")  # 대한메탈본사 2Q4ZRFPCXTIE9AMR
+#  pwInfor.set("EFU03JBSFHGCUH8N")  # 대한메탈CS EFU03JBSFHGCUH8N
+  pwInfor.set("Q2YICT73KTOE3S8L")  # 일지테크 K&C Q2YICT73KTOE3S8L
+
+#DER 2ea
 #  pwInfor.set("DRTB0X6QBAJURFKP") 삼척
 #  pwInfor.set("GHYIC0B9VG1C5SEJ") #참새
 #  pwInfor.set("G0K8OQE928EKGMZ8") #고니
 #  pwInfor.set("FPF7O8NHRELDAZQ1") #까치
-  pwInfor.set("2Q4ZRFPCXTIE9AMR")  # 대한메탈본사
-
+#  pwInfor.set("2Q4ZRFPCXTIE9AMR")  # 대한메탈본사
 
   pwInfor = Entry(root, width=30, textvariable=pwInfor)
   pwInfor.grid(row=8, column=2, sticky=N+E+W+S, pady=0)
@@ -117,9 +137,9 @@ class Gui():
 #  Roop_Time.grid(row=12, column=4, sticky=W, padx=7)
   #print(type(timeInfor))
 
-
-#데이터를 받아서 Transter list에 넣어줌
+# 데이터를 받아서 Transter list에 넣어줌
   Common_list = TagName.TagList.Kesco_Common_list
+
 #  print(Common_list)
   BMS_List_1 = TagName.TagList.Kesco_BMS_list_1
   EMS_List_1 = TagName.TagList.Kesco_EMS_list_1
@@ -128,14 +148,7 @@ class Gui():
   ETC_List_1 = TagName.TagList.Kesco_ETC_list_1
   ETC_List_2 = TagName.TagList.Kesco_ETC_list_2
 
-
-
-#  print(EMS_List)
-#  print(ETC_List)
-#  for x, y in enumerate(orin):
-#   transferDataList.insert(x+1, y)
-
-  # Transfer Listbox 생성
+# Transfer Listbox 생성
   Transfer_Time = Listbox(root)  # selectmode ="extended", height=22)
   Transfer_Time.grid(row=15, column=2, sticky=N + E + W + S, rowspan=3)
 
@@ -151,19 +164,19 @@ class Gui():
   id = idInfor.get()
   pw = pwInfor.get()
 
-  # 반복주기 값 입력
+# 반복주기 값 입력
   Converted_Roop_Time = Roop_Time
-  # 반복주기 적용 Check Box
+# 반복주기 적용 Check Box
   _on = IntVar()
   Converted_AutoMode_Status = _on
 
-  # 사전에 class를 인스턴스화 시켜 변수를 넘겨 줌
+# 사전에 class를 인스턴스화 시켜 변수를 넘겨 줌
   instance1 = receiveIndex(host, name, user, password, url, id, pw,
                            hostInfor, nameInfor, userInfor, passwordInfor, urlInfor, idInfor, pwInfor,
                            Common_list, BMS_List_1, EMS_List_1, BMS_List_2, EMS_List_2, ETC_List_1, ETC_List_2,
                            Converted_Roop_Time, Converted_AutoMode_Status, Transfer_Time, Response_Result)
 
- # btn_Term_change = Button(root, text='연결정보변경', command = lambda : insertNewCondition(hostInfor,nameInfor,userInfor,passwordInfor,urlInfor,idInfor,pwInfor))
+# btn_Term_change = Button(root, text='연결정보변경', command = lambda : insertNewCondition(hostInfor,nameInfor,userInfor,passwordInfor,urlInfor,idInfor,pwInfor))
   btn_Term_change = Button(root, text='연결정보변경',command=instance1.insertNewCondition)
   btn_Term_change.place(x=290, y=237)
 #  btn_Term_change.grid(row=2, column=5, sticky=N+W, ipadx=6)
@@ -171,7 +184,7 @@ class Gui():
   btn1 = Button(root, text ='     Data load     ', command=instance1.ManualDataload)
   btn1.place(x=470, y=50)
 #  btn1.grid(row=5, column=5, sticky= W, ipadx=6)
-#btn1 = Button(root, text ='입력', command=lambda: basicInfor(uA))
+# btn1 = Button(root, text ='입력', command=lambda: basicInfor(uA))
 # inputInfor() 가로 치면 한번 수행, ()없으면 버튼 누를때마다
 
   btn2 = Button(root, text ='Data Web Export', command=instance1.ManualDataWebExport)
